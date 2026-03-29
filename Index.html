@@ -19,7 +19,7 @@
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 button{cursor:pointer;font-family:var(--sans);border:none;outline:none}
 input,select,textarea{font-family:var(--sans);outline:none}
-
+ 
 /* TOPBAR */
 .topbar{
   position:sticky;top:0;z-index:80;
@@ -32,17 +32,17 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .btn-top{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none}
 .btn-add{background:var(--accent);color:#000}
 .btn-scan{background:var(--green);color:#000}
-
+ 
 /* TABS */
 .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:10px 16px;font-size:13px;color:var(--muted);white-space:nowrap;background:none;border:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
 .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
-
+ 
 /* CONTENT */
 .page{display:none;padding:14px}
 .page.on{display:block}
-
+ 
 /* TOOLBAR */
 .toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .search-box{position:relative;flex:1;min-width:160px}
@@ -53,7 +53,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .filters::-webkit-scrollbar{display:none}
 .pill{padding:5px 12px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:none;color:var(--muted);white-space:nowrap}
 .pill.on{background:rgba(56,189,248,.12);color:var(--accent);border-color:rgba(56,189,248,.3)}
-
+ 
 /* CARDS */
 .cards{display:flex;flex-direction:column;gap:10px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;border-left:3px solid transparent;transition:border-left-color .15s}
@@ -87,11 +87,11 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .card-acts{display:flex;gap:6px}
 .btn-sm{padding:4px 10px;border-radius:6px;font-size:12px;background:var(--surface);color:var(--text);border:1px solid var(--border)}
 .btn-del{color:var(--red);border-color:rgba(248,113,113,.2)}
-
+ 
 /* EMPTY */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-ico{font-size:40px;margin-bottom:12px;opacity:.4}
-
+ 
 /* DETAIL */
 .detail-back{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;margin-bottom:14px;background:none;padding:0}
 .detail-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
@@ -125,7 +125,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .add-note{display:flex;gap:8px;margin-top:10px}
 .add-note textarea{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:13px;resize:none;min-height:50px}
 .btn-note{background:var(--accent);color:#000;font-weight:700;border-radius:8px;padding:8px 12px;font-size:13px;align-self:flex-end}
-
+ 
 /* PIPELINE */
 .pipeline-wrap{overflow-x:auto;padding-bottom:10px}
 .pipeline{display:flex;gap:10px;min-width:max-content;padding:2px}
@@ -140,7 +140,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .pq{font-size:11px;color:var(--orange);margin-top:3px}
 .pf{font-size:11px;color:var(--purple);margin-top:3px}
 .pf.od{color:var(--red)}
-
+ 
 /* TIMELINE */
 .tl{max-width:600px}
 .tl-item{display:flex;gap:12px;margin-bottom:0}
@@ -154,7 +154,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .tl-type{font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .tl-title{font-size:13px;font-weight:600}
 .tl-sub{font-size:12px;color:var(--muted);margin-top:2px}
-
+ 
 /* STATS */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px}
@@ -165,7 +165,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .doc-stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px}
 .dl{font-size:11px;color:var(--muted);margin-bottom:4px}
 .dv{font-size:20px;font-weight:700;color:var(--green)}
-
+ 
 /* MODAL */
 .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;padding:0;opacity:0;pointer-events:none;transition:opacity .2s}
 .overlay.on{opacity:1;pointer-events:all}
@@ -185,7 +185,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .modal-foot{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
 .btn-cancel{flex:1;padding:11px;border-radius:8px;background:var(--surface);color:var(--muted);font-size:14px;border:1px solid var(--border)}
 .btn-save{flex:2;padding:11px;border-radius:8px;background:var(--accent);color:#000;font-weight:700;font-size:14px}
-
+ 
 /* SCAN */
 .scan-drop{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;margin-bottom:14px}
 .scan-drop:active{opacity:.8}
@@ -196,19 +196,19 @@ input,select,textarea{font-family:var(--sans);outline:none}
 .scan-table input{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:4px 6px;color:var(--text);font-size:12px;width:100%}
 .scan-status{text-align:center;padding:20px;color:var(--accent)}
 .scan-err{text-align:center;padding:16px;color:var(--red)}
-
+ 
 /* KPI bar */
 .kpi-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg)}
 .kpi{flex:1;text-align:center;padding:8px 4px}
 .kpi-n{font-size:18px;font-weight:700;color:var(--accent);line-height:1}
 .kpi-l{font-size:10px;color:var(--muted);text-transform:uppercase;margin-top:1px}
-
+ 
 .sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .sec-header .sec-title{margin-bottom:0}
 </style>
 </head>
 <body>
-
+ 
 <div class="topbar">
   <div class="brand">🚢 SEA·CRM<span>海運業務追蹤</span></div>
   <div class="top-btns">
@@ -221,16 +221,16 @@ input,select,textarea{font-family:var(--sans);outline:none}
     <button class="btn-top btn-add" onclick="openClientModal()">＋ 新增</button>
   </div>
 </div>
-
+ 
 <div class="kpi-bar" id="kpiBar"></div>
-
+ 
 <div class="tabs">
   <button class="tab on" onclick="switchTab('list',this)">客戶列表</button>
   <button class="tab" onclick="switchTab('pipeline',this)">進度看板</button>
   <button class="tab" onclick="switchTab('timeline',this)">時間軸</button>
   <button class="tab" onclick="switchTab('stats',this)">統計</button>
 </div>
-
+ 
 <!-- LIST -->
 <div class="page on" id="page-list">
   <div id="list-main">
@@ -258,19 +258,19 @@ input,select,textarea{font-family:var(--sans);outline:none}
   </div>
   <div id="list-detail" style="display:none"></div>
 </div>
-
+ 
 <!-- PIPELINE -->
 <div class="page" id="page-pipeline">
   <div class="pipeline-wrap">
     <div class="pipeline" id="pipelineEl"></div>
   </div>
 </div>
-
+ 
 <!-- TIMELINE -->
 <div class="page" id="page-timeline">
   <div class="tl" id="timelineEl"></div>
 </div>
-
+ 
 <!-- STATS -->
 <div class="page" id="page-stats">
   <div class="stat-grid" id="statGrid"></div>
@@ -283,7 +283,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
     <div id="recentNotes"></div>
   </div>
 </div>
-
+ 
 <!-- CLIENT MODAL -->
 <div class="overlay" id="clientModal">
   <div class="modal" onclick="event.stopPropagation()">
@@ -333,7 +333,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
     </div>
   </div>
 </div>
-
+ 
 <!-- QUOTE MODAL -->
 <div class="overlay" id="quoteModal">
   <div class="modal" onclick="event.stopPropagation()">
@@ -357,7 +357,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
     </div>
   </div>
 </div>
-
+ 
 <!-- FOLLOWUP MODAL -->
 <div class="overlay" id="fuModal">
   <div class="modal" onclick="event.stopPropagation()">
@@ -372,13 +372,13 @@ input,select,textarea{font-family:var(--sans);outline:none}
     </div>
   </div>
 </div>
-
+ 
 <!-- SCAN MODAL -->
 <div class="overlay" id="scanModal">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <h2>📋 貼上文字匯入</h2>
-
+ 
     <!-- STEP 1 -->
     <div id="scanStep1">
       <div style="background:var(--surface);border-radius:10px;padding:14px;margin-bottom:14px">
@@ -396,7 +396,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
       </div>
       <button class="btn-save" style="width:100%;padding:12px;font-size:14px" onclick="parsePastedText()">🔍 解析並預覽</button>
     </div>
-
+ 
     <!-- STEP 2: Result -->
     <div id="scanStep2" style="display:none">
       <div style="font-size:12px;color:var(--green);padding:8px 10px;background:rgba(52,211,153,.08);border-radius:6px;border:1px solid rgba(52,211,153,.2);margin-bottom:10px" id="scanCount"></div>
@@ -408,14 +408,14 @@ input,select,textarea{font-family:var(--sans);outline:none}
       </div>
       <button class="btn-cancel" style="width:100%;margin-top:10px;padding:10px;border-radius:8px;background:var(--surface);color:var(--muted);font-size:13px;border:1px solid var(--border)" onclick="backToStep1()">← 重新貼上</button>
     </div>
-
+ 
     <div class="modal-foot">
       <button class="btn-cancel" onclick="resetScan();closeModal('scanModal')">取消</button>
       <button class="btn-save" id="scanSaveBtn" style="display:none" onclick="saveScan()">💾 匯入</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- IMAGE OCR MODAL -->
 <div class="overlay" id="ocrModal">
   <div class="modal" onclick="event.stopPropagation()">
@@ -457,7 +457,7 @@ input,select,textarea{font-family:var(--sans);outline:none}
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ── DATA ──
 const DOC_MAP={phone_only:'📞 僅電話聯絡',profile:'📄 公司簡介',quote_doc:'💰 報價單',service:'📦 服務說明',contract:'📝 合約',tracking:'🗺️ 追蹤資訊'};
@@ -469,15 +469,15 @@ const STATUS_MAP={
   won:{l:'已成交',c:'b-won',col:'var(--green)'},
   closed:{l:'結案',c:'b-closed',col:'var(--muted)'}
 };
-
+ 
 let db=JSON.parse(localStorage.getItem('scrm3')||'[]');
 let editId=null,curFilter='all',curDetailId=null,scanClients=[];
-
+ 
 function save(){localStorage.setItem('scrm3',JSON.stringify(db));renderKpi();}
 function fmt(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('zh-TW');}catch{return d;}}
 function today(){return new Date().toISOString().slice(0,10);}
 function od(d){return d&&new Date(d)<new Date(today());}
-
+ 
 // ── KPI ──
 function renderKpi(){
   const t=db.length,w=db.filter(c=>c.status==='won').length,q=db.filter(c=>c.status==='quoted').length;
@@ -488,7 +488,7 @@ function renderKpi(){
     <div class="kpi"><div class="kpi-n" style="color:var(--green)">${w}</div><div class="kpi-l">成交</div></div>
     ${ov?`<div class="kpi"><div class="kpi-n" style="color:var(--red)">${ov}</div><div class="kpi-l">逾期</div></div>`:''}`;
 }
-
+ 
 // ── TABS ──
 function switchTab(t,btn){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
@@ -500,7 +500,7 @@ function switchTab(t,btn){
   if(t==='timeline')renderTimeline();
   if(t==='stats')renderStats();
 }
-
+ 
 // ── FILTER ──
 function setFilter(f,btn){
   curFilter=f;
@@ -508,14 +508,14 @@ function setFilter(f,btn){
   btn.classList.add('on');
   renderCards();
 }
-
+ 
 // ── LIST ──
 function showMain(){
   document.getElementById('list-main').style.display='block';
   document.getElementById('list-detail').style.display='none';
   curDetailId=null;
 }
-
+ 
 function renderCards(){
   const q=document.getElementById('searchQ').value.toLowerCase();
   let list=db.filter(c=>{
@@ -532,7 +532,7 @@ function renderCards(){
   grid.innerHTML=list.map(cardHTML).join('');
   renderKpi();
 }
-
+ 
 function cardHTML(c){
   const sc=STATUS_MAP[c.status]||STATUS_MAP.new;
   const lq=c.quotes?.length?c.quotes[c.quotes.length-1]:null;
@@ -559,7 +559,7 @@ function cardHTML(c){
     </div>
   </div>`;
 }
-
+ 
 // ── DETAIL ──
 function showDetail(id){
   const c=db.find(x=>x.id===id);if(!c)return;
@@ -569,7 +569,7 @@ function showDetail(id){
   el.style.display='block';
   el.innerHTML=buildDetail(c);
 }
-
+ 
 function buildDetail(c){
   const sc=STATUS_MAP[c.status]||STATUS_MAP.new;
   const isOd=c.followup&&od(c.followup.date);
@@ -580,7 +580,7 @@ function buildDetail(c){
   }).join('')||'<p style="color:var(--muted);font-size:13px">尚無報價</p>';
   const notes=(c.notes||[]).slice().reverse().map(n=>`<div class="note-item"><div class="note-meta">${new Date(n.at).toLocaleString('zh-TW')}</div><div class="note-txt">${n.text}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px">尚無備忘</p>';
   const fu=c.followup?`<div class="fu-box${isOd?' od':''}"><div><div class="fu-date">${fmt(c.followup.date)}${isOd?' ⚠️':''}</div><div class="fu-note-txt">${c.followup.note||''}</div></div><button class="btn-sm" onclick="clearFu('${c.id}')">清除</button></div>`:`<p style="color:var(--muted);font-size:13px">尚未設定</p>`;
-
+ 
   return `<button class="detail-back" onclick="showMain();renderCards()">← 返回列表</button>
   <div class="detail-card">
     <div class="detail-hero">
@@ -626,7 +626,7 @@ function buildDetail(c){
     </div>
   </div>`;
 }
-
+ 
 function addNote(id){
   const txt=document.getElementById('noteInput').value.trim();if(!txt)return;
   const c=db.find(x=>x.id===id);if(!c)return;
@@ -634,18 +634,18 @@ function addNote(id){
   c.notes.push({at:Date.now(),text:txt});
   save();showDetail(id);
 }
-
+ 
 function clearFu(id){
   const c=db.find(x=>x.id===id);if(!c)return;
   c.followup=null;save();showDetail(id);
 }
-
+ 
 function delClient(id){
   if(!confirm('確定刪除此客戶？'))return;
   db=db.filter(x=>x.id!==id);
   save();showMain();renderCards();
 }
-
+ 
 // ── CLIENT MODAL ──
 function openClientModal(id){
   editId=id||null;
@@ -664,7 +664,7 @@ function openClientModal(id){
   document.querySelectorAll('.chip-btn').forEach(b=>b.classList.toggle('on',(c?.docs||[]).includes(b.dataset.v)));
   openModal('clientModal');
 }
-
+ 
 function saveClient(){
   const name=document.getElementById('cName').value.trim();
   if(!name){alert('請填寫客戶姓名');return;}
@@ -680,7 +680,7 @@ function saveClient(){
   save();closeModal('clientModal');
   if(curDetailId)showDetail(curDetailId);else renderCards();
 }
-
+ 
 // ── QUOTE MODAL ──
 function openQuoteModal(id){
   document.getElementById('qId').value=id;
@@ -691,7 +691,7 @@ function openQuoteModal(id){
   document.getElementById('qNote').value='';
   openModal('quoteModal');
 }
-
+ 
 function saveQuote(){
   const id=document.getElementById('qId').value;
   const amt=document.getElementById('qAmt').value;
@@ -703,7 +703,7 @@ function saveQuote(){
   save();closeModal('quoteModal');
   if(curDetailId)showDetail(curDetailId);else renderCards();
 }
-
+ 
 // ── FOLLOWUP MODAL ──
 function openFuModal(id){
   const c=db.find(x=>x.id===id);
@@ -712,7 +712,7 @@ function openFuModal(id){
   document.getElementById('fuNote').value=c?.followup?.note||'';
   openModal('fuModal');
 }
-
+ 
 function saveFollowup(){
   const id=document.getElementById('fuId').value;
   const date=document.getElementById('fuDate').value;
@@ -723,13 +723,13 @@ function saveFollowup(){
   save();closeModal('fuModal');
   if(curDetailId)showDetail(curDetailId);else renderCards();
 }
-
+ 
 // ── MODAL HELPERS ──
 function openModal(id){document.getElementById(id).classList.add('on');}
 function closeModal(id){document.getElementById(id).classList.remove('on');}
 function bgClose(e,id){if(e.target.id===id)closeModal(id);}
 function toggleChip(btn){btn.classList.toggle('on');}
-
+ 
 // ── PIPELINE ──
 function renderPipeline(){
   const order=['new','phone_called','quoted','follow','won','closed'];
@@ -751,7 +751,7 @@ function renderPipeline(){
     </div>`;
   }).join('');
 }
-
+ 
 function switchToDetail(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===0));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
@@ -759,7 +759,7 @@ function switchToDetail(id){
   document.getElementById('list-main').style.display='none';
   showDetail(id);
 }
-
+ 
 // ── TIMELINE ──
 function renderTimeline(){
   const evs=[];
@@ -791,7 +791,7 @@ function renderTimeline(){
       </div>
     </div>`).join('');
 }
-
+ 
 // ── STATS ──
 function renderStats(){
   const t=db.length,w=db.filter(c=>c.status==='won').length,q=db.filter(c=>c.status==='quoted').length,f=db.filter(c=>c.status==='follow').length;
@@ -812,10 +812,10 @@ function renderStats(){
   an.sort((a,b)=>b.at-a.at);
   document.getElementById('recentNotes').innerHTML=an.slice(0,5).map(n=>`<div class="note-item"><div class="note-meta">${n.cn} · ${new Date(n.at).toLocaleString('zh-TW')}</div><div class="note-txt">${n.text}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px">尚無備忘</p>';
 }
-
+ 
 // ── SCAN / PASTE ──
 function openScan(){resetScan();openModal('scanModal');}
-
+ 
 function resetScan(){
   scanClients=[];
   document.getElementById('scanStep1').style.display='block';
@@ -824,50 +824,50 @@ function resetScan(){
   document.getElementById('pasteText').value='';
   document.getElementById('scanBody').innerHTML='';
 }
-
+ 
 function backToStep1(){
   document.getElementById('scanStep1').style.display='block';
   document.getElementById('scanStep2').style.display='none';
   document.getElementById('scanSaveBtn').style.display='none';
 }
-
+ 
 function parsePastedText(){
   const raw=document.getElementById('pasteText').value.trim();
   if(!raw){alert('請先貼上文字');return;}
-
+ 
   const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l.length>1);
   scanClients=[];
-
+ 
   const emailRe=/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/;
   const areaPhoneRe=/(0[2-9]-)(\d{6,8})/;
   const plainNumRe=/\d{7,8}/;
   const contactRe=/[^\s]{1,4}(?:先生|小姐|女士|經理|主任|總監|老闆)/;
   const dateRe=/(\d{1,2})[月\/](\d{1,2})日?/;
   const yr=new Date().getFullYear();
-
+ 
   let i=0;
   while(i<lines.length){
     const line=lines[i];
     if(/第[一二三四五六七八九十百\d]+頁/.test(line)||line.length<2){i++;continue;}
-
+ 
     let company='',phone='',contact='',sendDate='',note='';
     let workLine=line;
-
+ 
     // Step 1: 先移除 email（避免干擾後續解析）
     const emailM=workLine.match(emailRe);
     let emailVal='';
     if(emailM){emailVal=emailM[0];workLine=workLine.replace(emailM[0],'').replace(/\s+/g,' ').trim();}
-
+ 
     // Step 2: 先移除聯絡人（避免被當成公司名）
     const contactM=workLine.match(contactRe);
     if(contactM){
       contact=contactM[0];
       workLine=workLine.replace(contactM[0],'').replace(/\s+/g,' ').trim();
     }
-
+ 
     // Step 3: 先移除「傳真:XXXX」
     workLine=workLine.replace(/傳真[:：]?\s*[\d\-]+/,'').trim();
-
+ 
     // Step 4: 找電話，切割出公司名稱
     const areaM=workLine.match(areaPhoneRe);
     if(areaM){
@@ -895,7 +895,7 @@ function parsePastedText(){
         }
       }
     }
-
+ 
     // Step 5: 從剩餘文字抓日期
     const dateM=workLine.match(dateRe);
     if(dateM){
@@ -904,20 +904,20 @@ function parsePastedText(){
       sendDate=`${yr}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
       workLine=workLine.replace(dateM[0],'').trim();
     }
-
+ 
     // Step 6: 剩下的就是備注
     note=workLine.replace(/^[.\s。,，]+/,'').replace(/[.\s。,，]+$/,'').trim();
-
+ 
     company=company.replace(/(0[2-9]-)$/,'').replace(/[,，。\s]+$/,'').trim();
-
+ 
     if(company.length>1){
       scanClients.push({company,phone,contact,sendDate,note,email:emailVal});
     }
     i++;
   }
-
+ 
   if(!scanClients.length){alert('無法解析，請確認格式');return;}
-
+ 
   document.getElementById('scanCount').textContent=`✅ 解析到 ${scanClients.length} 筆，可直接修改後匯入`;
   document.getElementById('scanBody').innerHTML=scanClients.map((c,idx)=>`
     <tr>
@@ -933,9 +933,9 @@ function parsePastedText(){
   document.getElementById('scanStep2').style.display='block';
   document.getElementById('scanSaveBtn').style.display='block';
 }
-
+ 
 function esc(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-
+ 
 function saveScan(){
   let n=0;
   scanClients.forEach((_,i)=>{
@@ -953,7 +953,7 @@ function saveScan(){
   save();resetScan();closeModal('scanModal');renderCards();
   if(n)alert(`✅ 已匯入 ${n} 筆客戶！`);
 }
-
+ 
 // ── 匯出/匯入 ──
 function exportData(){
   if(!db.length){alert('目前沒有資料可以匯出');return;}
@@ -967,7 +967,7 @@ function exportData(){
   a.click();
   URL.revokeObjectURL(url);
 }
-
+ 
 function importData(input){
   const file=input.files[0];
   if(!file)return;
@@ -991,10 +991,10 @@ function importData(input){
   reader.readAsText(file);
   input.value='';
 }
-
+ 
 // ── 圖片辨識 OCR ──
 function openImgOcr(){resetOcr();openModal('ocrModal');}
-
+ 
 function resetOcr(){
   document.getElementById('ocrUploadArea').style.display='block';
   document.getElementById('ocrPreviewImg').style.display='none';
@@ -1004,7 +1004,7 @@ function resetOcr(){
   document.getElementById('ocrSaveBtn').style.display='none';
   document.getElementById('ocrFile').value='';
 }
-
+ 
 function handleOcrFile(file){
   if(!file)return;
   const reader=new FileReader();
@@ -1019,7 +1019,7 @@ function handleOcrFile(file){
   };
   reader.readAsDataURL(file);
 }
-
+ 
 async function callImgOcr(b64, mime){
   try{
     const prompt=`這是一張廠商基本資料的頁面截圖。請辨識並只回傳以下欄位的 JSON（找不到的填空字串）：
@@ -1031,7 +1031,7 @@ async function callImgOcr(b64, mime){
   "note": "產品項目出口或進口的內容（簡短摘要）、網址"
 }
 只回傳 JSON，不要其他說明。`;
-
+ 
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{
@@ -1048,13 +1048,13 @@ async function callImgOcr(b64, mime){
         ]}]
       })
     });
-
+ 
     const data=await res.json();
     if(data.error)throw new Error(data.error.message);
     const raw=data.content.map(b=>b.text||'').join('');
     const clean=raw.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(clean);
-
+ 
     document.getElementById('ocrName').value=parsed.company||'';
     document.getElementById('ocrPhone').value=parsed.phone||'';
     document.getElementById('ocrFax').value=parsed.fax||'';
@@ -1064,14 +1064,14 @@ async function callImgOcr(b64, mime){
     document.getElementById('ocrStatus').style.display='none';
     document.getElementById('ocrResult').style.display='block';
     document.getElementById('ocrSaveBtn').style.display='block';
-
+ 
   }catch(err){
     document.getElementById('ocrStatus').style.display='none';
     document.getElementById('ocrErr').style.display='block';
     document.getElementById('ocrErr').innerHTML=`⚠️ 辨識失敗：${err.message}<br><small style="color:var(--muted)">請確認是從 GitHub Pages 網址開啟，不是本機檔案</small><br><button class="btn-sm" style="margin-top:8px" onclick="resetOcr()">重試</button>`;
   }
 }
-
+ 
 function saveOcrClient(){
   const name=document.getElementById('ocrName').value.trim();
   if(!name){alert('請填寫公司名稱');return;}
@@ -1091,10 +1091,11 @@ function saveOcrClient(){
   });
   save();resetOcr();closeModal('ocrModal');renderCards();
 }
-
+ 
 // ── INIT ──
 renderKpi();
 renderCards();
 </script>
 </body>
 </html>
+ 
