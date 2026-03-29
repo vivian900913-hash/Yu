@@ -170,7 +170,7 @@ padding:10px 14px;display:flex;align-items:center;gap:8px;
 /* MODAL */
 .overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;padding:0;opacity:0;pointer-events:none;transition:opacity .2s}
 .overlay.on{opacity:1;pointer-events:all}
-.modal{background:var(–card);border-radius:16px 16px 0 0;padding:20px 16px;width:100%;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s ease}
+.modal{background:var(–card);border-radius:16px 16px 0 0;padding:20px 16px;width:100%;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s ease;position:relative;z-index:201}
 .overlay.on .modal{transform:translateY(0)}
 .modal-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:0 auto 16px}
 .modal h2{font-size:16px;color:var(–accent);margin-bottom:18px}
@@ -287,8 +287,8 @@ padding:10px 14px;display:flex;align-items:center;gap:8px;
 
 <!-- CLIENT MODAL -->
 
-<div class="overlay" id="clientModal" onclick="bgClose(event,'clientModal')">
-  <div class="modal">
+<div class="overlay" id="clientModal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <h2 id="cTitle">⚓ 新增客戶</h2>
     <div class="fg-row">
@@ -334,8 +334,8 @@ padding:10px 14px;display:flex;align-items:center;gap:8px;
 
 <!-- QUOTE MODAL -->
 
-<div class="overlay" id="quoteModal" onclick="bgClose(event,'quoteModal')">
-  <div class="modal">
+<div class="overlay" id="quoteModal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <h2>💰 新增報價</h2>
     <input type="hidden" id="qId">
@@ -359,8 +359,8 @@ padding:10px 14px;display:flex;align-items:center;gap:8px;
 
 <!-- FOLLOWUP MODAL -->
 
-<div class="overlay" id="fuModal" onclick="bgClose(event,'fuModal')">
-  <div class="modal">
+<div class="overlay" id="fuModal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <h2>🔔 設定追蹤</h2>
     <input type="hidden" id="fuId">
@@ -375,8 +375,8 @@ padding:10px 14px;display:flex;align-items:center;gap:8px;
 
 <!-- SCAN MODAL -->
 
-<div class="overlay" id="scanModal" onclick="bgClose(event,'scanModal')">
-  <div class="modal">
+<div class="overlay" id="scanModal">
+  <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <h2>📋 貼上文字匯入</h2>
 
