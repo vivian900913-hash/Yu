@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>海運業務 CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1923;--card:#1a2535;--surface:#1f2e40;
+  --accent:#38bdf8;--green:#34d399;--orange:#fb923c;
+  --red:#f87171;--purple:#a78bfa;--muted:#64748b;
+  --text:#e2e8f0;--border:#2a3a4a;--r:10px;
+  --sans:'Noto Sans TC',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+button{cursor:pointer;font-family:var(--sans);border:none;outline:none}
+input,select,textarea{font-family:var(--sans);outline:none}
+
+/* TOPBAR */
+.topbar{
+position:sticky;top:0;z-index:80;
+background:var(–bg);border-bottom:1px solid var(–border);
+padding:10px 14px;display:flex;align-items:center;gap:8px;
+}
+.brand{font-size:16px;font-weight:700;color:var(–accent);flex:1}
+.brand span{font-size:11px;color:var(–muted);display:block;font-weight:400}
+.top-btns{display:flex;gap:6px}
+.btn-top{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none}
+.btn-add{background:var(–accent);color:#000}
+.btn-scan{background:var(–green);color:#000}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(–border);background:var(–bg);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;font-size:13px;color:var(–muted);white-space:nowrap;background:none;border:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.tab.on{color:var(–accent);border-bottom-color:var(–accent)}
+
+/* CONTENT */
+.page{display:none;padding:14px}
+.page.on{display:block}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search-box{position:relative;flex:1;min-width:160px}
+.search-box input{width:100%;background:var(–card);border:1px solid var(–border);border-radius:8px;padding:8px 10px 8px 32px;color:var(–text);font-size:14px}
+.search-box input::placeholder{color:var(–muted)}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(–muted);font-size:13px;pointer-events:none}
+.filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.filters::-webkit-scrollbar{display:none}
+.pill{padding:5px 12px;border-radius:20px;font-size:12px;border:1px solid var(–border);background:none;color:var(–muted);white-space:nowrap}
+.pill.on{background:rgba(56,189,248,.12);color:var(–accent);border-color:rgba(56,189,248,.3)}
+
+/* CARDS */
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:14px;cursor:pointer;border-left:3px solid transparent;transition:border-left-color .15s}
+.card:active{opacity:.85}
+.card.s-new{border-left-color:var(–accent)}
+.card.s-phone_called{border-left-color:var(–green)}
+.card.s-quoted{border-left-color:var(–orange)}
+.card.s-follow{border-left-color:var(–purple)}
+.card.s-won{border-left-color:var(–green)}
+.card.s-closed{border-left-color:var(–muted)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.c-name{font-size:15px;font-weight:700}
+.c-co{font-size:12px;color:var(–muted);margin-top:2px}
+.badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;margin-left:8px}
+.b-new{background:rgba(56,189,248,.12);color:var(–accent)}
+.b-phone_called{background:rgba(52,211,153,.12);color:var(–green)}
+.b-quoted{background:rgba(251,146,60,.12);color:var(–orange)}
+.b-follow{background:rgba(167,139,250,.12);color:var(–purple)}
+.b-won{background:rgba(52,211,153,.15);color:var(–green)}
+.b-closed{background:rgba(100,116,139,.12);color:var(–muted)}
+.card-row{display:flex;gap:16px;margin-bottom:6px;font-size:12px}
+.card-row span{color:var(–muted)}
+.card-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.chip{font-size:11px;padding:2px 7px;border-radius:4px;background:rgba(52,211,153,.1);color:var(–green)}
+.card-quote{font-size:12px;color:var(–orange);margin-bottom:4px}
+.card-fu{font-size:12px;color:var(–purple);margin-bottom:4px}
+.card-fu.od{color:var(–red)}
+.card-note{font-size:12px;color:var(–muted);margin-bottom:8px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(–border);padding-top:8px;margin-top:4px}
+.card-date{font-size:11px;color:var(–muted)}
+.card-acts{display:flex;gap:6px}
+.btn-sm{padding:4px 10px;border-radius:6px;font-size:12px;background:var(–surface);color:var(–text);border:1px solid var(–border)}
+.btn-del{color:var(–red);border-color:rgba(248,113,113,.2)}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(–muted)}
+.empty-ico{font-size:40px;margin-bottom:12px;opacity:.4}
+
+/* DETAIL */
+.detail-back{display:flex;align-items:center;gap:6px;color:var(–muted);font-size:13px;margin-bottom:14px;background:none;padding:0}
+.detail-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;margin-bottom:12px}
+.detail-hero{padding:14px;border-bottom:1px solid var(–border)}
+.detail-name{font-size:20px;font-weight:700;margin-bottom:4px}
+.detail-co{font-size:13px;color:var(–muted);margin-bottom:10px}
+.detail-acts{display:flex;gap:6px;flex-wrap:wrap}
+.btn-action{padding:7px 12px;border-radius:8px;font-size:12px;background:var(–surface);color:var(–text);border:1px solid var(–border)}
+.btn-action.red{color:var(–red);border-color:rgba(248,113,113,.2)}
+.detail-body{padding:14px}
+.section{margin-bottom:18px}
+.sec-title{font-size:10px;color:var(–accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-f label{font-size:11px;color:var(–muted);display:block;margin-bottom:2px}
+.info-f span{font-size:14px}
+.sent-list{display:flex;flex-wrap:wrap;gap:6px}
+.sent-chip{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:6px;padding:5px 10px;font-size:12px;color:var(–green)}
+.sent-chip small{display:block;font-size:10px;color:var(–muted);margin-top:1px}
+.quote-row{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.15);border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between}
+.q-amt{font-size:16px;color:var(–orange);font-weight:700}
+.q-detail{font-size:11px;color:var(–muted);margin-top:2px}
+.q-meta{text-align:right;font-size:11px;color:var(–muted)}
+.fu-box{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.15);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.fu-box.od{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.2)}
+.fu-date{font-size:15px;color:var(–purple);font-weight:600}
+.fu-box.od .fu-date{color:var(–red)}
+.fu-note-txt{font-size:12px;color:var(–muted);margin-top:3px}
+.note-item{background:var(–surface);border-left:2px solid var(–accent);border-radius:6px;padding:10px;margin-bottom:8px}
+.note-meta{font-size:10px;color:var(–muted);margin-bottom:4px}
+.note-txt{font-size:13px;line-height:1.5}
+.add-note{display:flex;gap:8px;margin-top:10px}
+.add-note textarea{flex:1;background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:8px 10px;color:var(–text);font-size:13px;resize:none;min-height:50px}
+.btn-note{background:var(–accent);color:#000;font-weight:700;border-radius:8px;padding:8px 12px;font-size:13px;align-self:flex-end}
+
+/* PIPELINE */
+.pipeline-wrap{overflow-x:auto;padding-bottom:10px}
+.pipeline{display:flex;gap:10px;min-width:max-content;padding:2px}
+.pipe-col{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:12px;width:200px;flex-shrink:0}
+.pipe-head{font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;justify-content:space-between}
+.pipe-count{background:var(–surface);border-radius:20px;padding:1px 7px;font-size:11px}
+.pipe-card{background:var(–surface);border:1px solid var(–border);border-radius:7px;padding:10px;margin-bottom:7px;cursor:pointer}
+.pipe-card:active{opacity:.8}
+.pn{font-size:13px;font-weight:600}
+.pc{font-size:11px;color:var(–muted);margin-top:2px}
+.pd{font-size:10px;color:var(–muted);margin-top:5px}
+.pq{font-size:11px;color:var(–orange);margin-top:3px}
+.pf{font-size:11px;color:var(–purple);margin-top:3px}
+.pf.od{color:var(–red)}
+
+/* TIMELINE */
+.tl{max-width:600px}
+.tl-item{display:flex;gap:12px;margin-bottom:0}
+.tl-line-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-dot{width:26px;height:26px;border-radius:50%;border:2px solid;display:grid;place-items:center;font-size:11px;background:var(–bg);z-index:1;flex-shrink:0}
+.tl-connector{width:1px;background:var(–border);flex:1;min-height:10px}
+.tl-body{flex:1;padding-bottom:16px}
+.tl-date{font-size:10px;color:var(–muted);margin-bottom:4px;margin-top:3px}
+.tl-card{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:10px;cursor:pointer}
+.tl-card:active{opacity:.8}
+.tl-type{font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.tl-title{font-size:13px;font-weight:600}
+.tl-sub{font-size:12px;color:var(–muted);margin-top:2px}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:14px}
+.sl{font-size:10px;color:var(–muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.sv{font-size:24px;font-weight:700;color:var(–accent)}
+.ss{font-size:11px;color:var(–muted);margin-top:2px}
+.doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.doc-stat{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px}
+.dl{font-size:11px;color:var(–muted);margin-bottom:4px}
+.dv{font-size:20px;font-weight:700;color:var(–green)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;padding:0;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(–card);border-radius:16px 16px 0 0;padding:20px 16px;width:100%;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s ease}
+.overlay.on .modal{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:0 auto 16px}
+.modal h2{font-size:16px;color:var(–accent);margin-bottom:18px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.07em}
+.fg input,.fg select,.fg textarea{background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:10px;color:var(–text);font-size:14px}
+.fg textarea{resize:none}
+.fg select option{background:var(–card)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip-btn{padding:6px 12px;border-radius:20px;font-size:12px;border:1px solid var(–border);background:none;color:var(–muted)}
+.chip-btn.on{background:rgba(52,211,153,.12);color:var(–green);border-color:rgba(52,211,153,.3)}
+.modal-foot{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(–border)}
+.btn-cancel{flex:1;padding:11px;border-radius:8px;background:var(–surface);color:var(–muted);font-size:14px;border:1px solid var(–border)}
+.btn-save{flex:2;padding:11px;border-radius:8px;background:var(–accent);color:#000;font-weight:700;font-size:14px}
+
+/* SCAN */
+.scan-drop{border:2px dashed var(–border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;margin-bottom:14px}
+.scan-drop:active{opacity:.8}
+#scanImg{width:100%;border-radius:8px;border:1px solid var(–border);max-height:200px;object-fit:contain;background:#000;margin-bottom:14px}
+.scan-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.scan-table th{text-align:left;padding:6px 6px;color:var(–muted);font-size:11px;border-bottom:1px solid var(–border);font-weight:500}
+.scan-table td{padding:5px 4px;border-bottom:1px solid var(–border)}
+.scan-table input{background:var(–surface);border:1px solid var(–border);border-radius:5px;padding:4px 6px;color:var(–text);font-size:12px;width:100%}
+.scan-status{text-align:center;padding:20px;color:var(–accent)}
+.scan-err{text-align:center;padding:16px;color:var(–red)}
+
+/* KPI bar */
+.kpi-bar{display:flex;gap:0;border-bottom:1px solid var(–border);background:var(–bg)}
+.kpi{flex:1;text-align:center;padding:8px 4px}
+.kpi-n{font-size:18px;font-weight:700;color:var(–accent);line-height:1}
+.kpi-l{font-size:10px;color:var(–muted);text-transform:uppercase;margin-top:1px}
+
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sec-header .sec-title{margin-bottom:0}
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">🚢 SEA·CRM<span>海運業務追蹤</span></div>
+  <div class="top-btns">
+    <button class="btn-top btn-scan" onclick="openScan()">📋 匯入</button>
+    <button class="btn-top btn-add" onclick="openClientModal()">＋ 新增</button>
+  </div>
+</div>
+
+<div class="kpi-bar" id="kpiBar"></div>
+
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('list',this)">客戶列表</button>
+  <button class="tab" onclick="switchTab('pipeline',this)">進度看板</button>
+  <button class="tab" onclick="switchTab('timeline',this)">時間軸</button>
+  <button class="tab" onclick="switchTab('stats',this)">統計</button>
+</div>
+
+<!-- LIST -->
+
+<div class="page on" id="page-list">
+  <div id="list-main">
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchQ" placeholder="搜尋客戶/公司..." oninput="renderCards()">
+      </div>
+    </div>
+    <div class="filters" id="filterRow">
+      <button class="pill on" onclick="setFilter('all',this)">全部</button>
+      <button class="pill" onclick="setFilter('new',this)">新客戶</button>
+      <button class="pill" onclick="setFilter('phone_called',this)">電話聯繫中</button>
+      <button class="pill" onclick="setFilter('quoted',this)">已報價</button>
+      <button class="pill" onclick="setFilter('follow',this)">追蹤中</button>
+      <button class="pill" onclick="setFilter('won',this)">已成交</button>
+      <button class="pill" onclick="setFilter('closed',this)">結案</button>
+    </div>
+    <div class="cards" id="cardsGrid"></div>
+    <div class="empty" id="cardsEmpty" style="display:none">
+      <div class="empty-ico">⚓</div>
+      <div style="font-size:15px;color:var(--text);margin-bottom:6px">尚無客戶資料</div>
+      <div style="font-size:13px">點右上角「＋ 新增」開始記錄</div>
+    </div>
+  </div>
+  <div id="list-detail" style="display:none"></div>
+</div>
+
+<!-- PIPELINE -->
+
+<div class="page" id="page-pipeline">
+  <div class="pipeline-wrap">
+    <div class="pipeline" id="pipelineEl"></div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+
+<div class="page" id="page-timeline">
+  <div class="tl" id="timelineEl"></div>
+</div>
+
+<!-- STATS -->
+
+<div class="page" id="page-stats">
+  <div class="stat-grid" id="statGrid"></div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px">
+    <div class="sec-title" style="margin-bottom:10px">文件寄送統計</div>
+    <div class="doc-grid" id="docGrid"></div>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+    <div class="sec-title" style="margin-bottom:10px">最近備忘</div>
+    <div id="recentNotes"></div>
+  </div>
+</div>
+
+<!-- CLIENT MODAL -->
+
+<div class="overlay" id="clientModal" onclick="bgClose(event,'clientModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="cTitle">⚓ 新增客戶</h2>
+    <div class="fg-row">
+      <div class="fg"><label>姓名 *</label><input id="cName" placeholder="王大明"></div>
+      <div class="fg"><label>公司</label><input id="cCo" placeholder="ABC公司"></div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>電話/LINE</label><input id="cPhone" placeholder="0912-345-678"></div>
+      <div class="fg"><label>Email</label><input id="cEmail" type="email" placeholder="a@b.com"></div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>航線</label><input id="cRoute" placeholder="台灣→美西"></div>
+      <div class="fg"><label>狀態</label>
+        <select id="cStatus">
+          <option value="new">新客戶</option>
+          <option value="phone_called">電話聯繫中</option>
+          <option value="quoted">已報價</option>
+          <option value="follow">追蹤中</option>
+          <option value="won">已成交</option>
+          <option value="closed">結案</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <label>已寄送文件</label>
+      <div class="chip-group" id="docChips">
+        <button class="chip-btn" data-v="phone_only" onclick="toggleChip(this)">📞 僅電話聯絡</button>
+        <button class="chip-btn" data-v="profile" onclick="toggleChip(this)">📄 公司簡介</button>
+        <button class="chip-btn" data-v="quote_doc" onclick="toggleChip(this)">💰 報價單</button>
+        <button class="chip-btn" data-v="service" onclick="toggleChip(this)">📦 服務說明</button>
+        <button class="chip-btn" data-v="contract" onclick="toggleChip(this)">📝 合約</button>
+        <button class="chip-btn" data-v="tracking" onclick="toggleChip(this)">🗺️ 追蹤資訊</button>
+      </div>
+    </div>
+    <div class="fg"><label>寄送公司簡介日期</label><input id="cProfileDate" type="date"></div>
+    <div class="fg"><label>備忘</label><textarea id="cNote" rows="2" placeholder="貨物類型、需求..."></textarea></div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('clientModal')">取消</button>
+      <button class="btn-save" onclick="saveClient()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE MODAL -->
+
+<div class="overlay" id="quoteModal" onclick="bgClose(event,'quoteModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>💰 新增報價</h2>
+    <input type="hidden" id="qId">
+    <div class="fg-row">
+      <div class="fg" style="grid-column:span 1"><label>金額 *</label><input id="qAmt" type="number" placeholder="5000"></div>
+      <div class="fg"><label>幣別</label>
+        <select id="qCur"><option>USD</option><option>TWD</option><option>CNY</option><option>EUR</option></select>
+      </div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>報價日期</label><input id="qDate" type="date"></div>
+      <div class="fg"><label>有效期限</label><input id="qExp" type="date"></div>
+    </div>
+    <div class="fg"><label>備注</label><textarea id="qNote" rows="2" placeholder="含FCL 20'x2..."></textarea></div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('quoteModal')">取消</button>
+      <button class="btn-save" onclick="saveQuote()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOLLOWUP MODAL -->
+
+<div class="overlay" id="fuModal" onclick="bgClose(event,'fuModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>🔔 設定追蹤</h2>
+    <input type="hidden" id="fuId">
+    <div class="fg"><label>追蹤日期 *</label><input id="fuDate" type="date"></div>
+    <div class="fg"><label>追蹤事項</label><textarea id="fuNote" rows="3" placeholder="確認客戶意願..."></textarea></div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('fuModal')">取消</button>
+      <button class="btn-save" onclick="saveFollowup()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCAN MODAL -->
+
+<div class="overlay" id="scanModal" onclick="bgClose(event,'scanModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>📋 貼上文字匯入</h2>
+
+```
+<!-- STEP 1 -->
+<div id="scanStep1">
+  <div style="background:var(--surface);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:10px">📱 操作步驟</div>
+    <div style="font-size:13px;line-height:2;color:var(--text)">
+      1️⃣ 打開「相機」拍下名單<br>
+      2️⃣ 長按圖片中的文字 → 點「全選」<br>
+      3️⃣ 點「拷貝」<br>
+      4️⃣ 回到這裡，點下方「貼上文字」
+    </div>
+  </div>
+  <div class="fg">
+    <label>貼上辨識出的文字</label>
+    <textarea id="pasteText" rows="8" placeholder="把從相機複製的文字貼在這裡...&#10;&#10;例如：&#10;于詮企業股份有限公司 22790141 內銷&#10;千方食品行銷有限公司 24964889 內銷&#10;..." style="font-size:13px;line-height:1.6"></textarea>
+  </div>
+  <button class="btn-save" style="width:100%;padding:12px;font-size:14px" onclick="parsePastedText()">🔍 解析並預覽</button>
+</div>
+
+<!-- STEP 2: Result -->
+<div id="scanStep2" style="display:none">
+  <div style="font-size:12px;color:var(--green);padding:8px 10px;background:rgba(52,211,153,.08);border-radius:6px;border:1px solid rgba(52,211,153,.2);margin-bottom:10px" id="scanCount"></div>
+  <div style="overflow-x:auto">
+    <table class="scan-table">
+      <thead><tr><th>✓</th><th>公司名稱</th><th>電話</th><th>備注</th></tr></thead>
+      <tbody id="scanBody"></tbody>
+    </table>
+  </div>
+  <button class="btn-cancel" style="width:100%;margin-top:10px;padding:10px;border-radius:8px;background:var(--surface);color:var(--muted);font-size:13px;border:1px solid var(--border)" onclick="backToStep1()">← 重新貼上</button>
+</div>
+
+<div class="modal-foot">
+  <button class="btn-cancel" onclick="resetScan();closeModal('scanModal')">取消</button>
+  <button class="btn-save" id="scanSaveBtn" style="display:none" onclick="saveScan()">💾 匯入</button>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const DOC_MAP={phone_only:'📞 僅電話聯絡',profile:'📄 公司簡介',quote_doc:'💰 報價單',service:'📦 服務說明',contract:'📝 合約',tracking:'🗺️ 追蹤資訊'};
+const STATUS_MAP={
+  new:{l:'新客戶',c:'b-new',col:'var(--accent)'},
+  phone_called:{l:'電話聯繫中',c:'b-phone_called',col:'var(--green)'},
+  quoted:{l:'已報價',c:'b-quoted',col:'var(--orange)'},
+  follow:{l:'追蹤中',c:'b-follow',col:'var(--purple)'},
+  won:{l:'已成交',c:'b-won',col:'var(--green)'},
+  closed:{l:'結案',c:'b-closed',col:'var(--muted)'}
+};
+
+let db=JSON.parse(localStorage.getItem('scrm3')||'[]');
+let editId=null,curFilter='all',curDetailId=null,scanClients=[];
+
+function save(){localStorage.setItem('scrm3',JSON.stringify(db));renderKpi();}
+function fmt(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('zh-TW');}catch{return d;}}
+function today(){return new Date().toISOString().slice(0,10);}
+function od(d){return d&&new Date(d)<new Date(today());}
+
+// ── KPI ──
+function renderKpi(){
+  const t=db.length,w=db.filter(c=>c.status==='won').length,q=db.filter(c=>c.status==='quoted').length;
+  const ov=db.filter(c=>c.followup&&od(c.followup.date)).length;
+  document.getElementById('kpiBar').innerHTML=`
+    <div class="kpi"><div class="kpi-n">${t}</div><div class="kpi-l">客戶</div></div>
+    <div class="kpi"><div class="kpi-n" style="color:var(--orange)">${q}</div><div class="kpi-l">報價中</div></div>
+    <div class="kpi"><div class="kpi-n" style="color:var(--green)">${w}</div><div class="kpi-l">成交</div></div>
+    ${ov?`<div class="kpi"><div class="kpi-n" style="color:var(--red)">${ov}</div><div class="kpi-l">逾期</div></div>`:''}`;
+}
+
+// ── TABS ──
+function switchTab(t,btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('page-'+t).classList.add('on');
+  if(t==='list'){showMain();renderCards();}
+  if(t==='pipeline')renderPipeline();
+  if(t==='timeline')renderTimeline();
+  if(t==='stats')renderStats();
+}
+
+// ── FILTER ──
+function setFilter(f,btn){
+  curFilter=f;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  renderCards();
+}
+
+// ── LIST ──
+function showMain(){
+  document.getElementById('list-main').style.display='block';
+  document.getElementById('list-detail').style.display='none';
+  curDetailId=null;
+}
+
+function renderCards(){
+  const q=document.getElementById('searchQ').value.toLowerCase();
+  let list=db.filter(c=>{
+    const m=c.name.toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q);
+    return m&&(curFilter==='all'||c.status===curFilter);
+  }).sort((a,b)=>b.createdAt-a.createdAt);
+  const grid=document.getElementById('cardsGrid');
+  const empty=document.getElementById('cardsEmpty');
+  if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=list.map(cardHTML).join('');
+  renderKpi();
+}
+
+function cardHTML(c){
+  const sc=STATUS_MAP[c.status]||STATUS_MAP.new;
+  const lq=c.quotes?.length?c.quotes[c.quotes.length-1]:null;
+  const ln=c.notes?.length?c.notes[c.notes.length-1]:null;
+  const chips=(c.docs||[]).map(d=>`<span class="chip">${DOC_MAP[d]||d}</span>`).join('');
+  const isOd=c.followup&&od(c.followup.date);
+  return `<div class="card s-${c.status}" onclick="showDetail('${c.id}')">
+    <div class="card-top">
+      <div><div class="c-name">${c.name}</div><div class="c-co">${c.company||'—'}</div></div>
+      <span class="badge ${sc.c}">${sc.l}</span>
+    </div>
+    <div class="card-row"><span>📞</span>${c.phone||'—'}&nbsp;&nbsp;<span>🚢</span>${c.route||'—'}</div>
+    ${chips?`<div class="card-chips">${chips}</div>`:''}
+    ${lq?`<div class="card-quote">💰 ${lq.currency} ${Number(lq.amount).toLocaleString()} · ${fmt(lq.date)}</div>`:''}
+    ${c.followup?`<div class="card-fu${isOd?' od':''}">${isOd?'⚠️':'🔔'} 追蹤：${fmt(c.followup.date)}</div>`:''}
+    ${ln?`<div class="card-note">💬 ${ln.text}</div>`:''}
+    <div class="card-foot">
+      <span class="card-date">${fmt(c.createdAt)}</span>
+      <div class="card-acts" onclick="event.stopPropagation()">
+        <button class="btn-sm" onclick="event.stopPropagation();openClientModal('${c.id}')">✏️ 編輯</button>
+        <button class="btn-sm btn-del" onclick="event.stopPropagation();delClient('${c.id}')">🗑️ 刪除</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── DETAIL ──
+function showDetail(id){
+  const c=db.find(x=>x.id===id);if(!c)return;
+  curDetailId=id;
+  document.getElementById('list-main').style.display='none';
+  const el=document.getElementById('list-detail');
+  el.style.display='block';
+  el.innerHTML=buildDetail(c);
+}
+
+function buildDetail(c){
+  const sc=STATUS_MAP[c.status]||STATUS_MAP.new;
+  const isOd=c.followup&&od(c.followup.date);
+  const sent=(c.docs||[]).map(d=>`<div class="sent-chip">${DOC_MAP[d]||d}${d==='profile'&&c.profileSentDate?`<small>${fmt(c.profileSentDate)}</small>`:''}</div>`).join('');
+  const quotes=(c.quotes||[]).slice().reverse().map(q=>{
+    const exp=q.expiry?(od(q.expiry)?'<span style="color:var(--red)">已過期</span>':`<span style="color:var(--green)">至${fmt(q.expiry)}</span>`):'';
+    return `<div class="quote-row"><div><div class="q-amt">${q.currency} ${Number(q.amount).toLocaleString()}</div><div class="q-detail">${q.note||''}</div></div><div class="q-meta">${fmt(q.date)}<br>${exp}</div></div>`;
+  }).join('')||'<p style="color:var(--muted);font-size:13px">尚無報價</p>';
+  const notes=(c.notes||[]).slice().reverse().map(n=>`<div class="note-item"><div class="note-meta">${new Date(n.at).toLocaleString('zh-TW')}</div><div class="note-txt">${n.text}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px">尚無備忘</p>';
+  const fu=c.followup?`<div class="fu-box${isOd?' od':''}"><div><div class="fu-date">${fmt(c.followup.date)}${isOd?' ⚠️':''}</div><div class="fu-note-txt">${c.followup.note||''}</div></div><button class="btn-sm" onclick="clearFu('${c.id}')">清除</button></div>`:`<p style="color:var(--muted);font-size:13px">尚未設定</p>`;
+
+  return `<button class="detail-back" onclick="showMain();renderCards()">← 返回列表</button>
+  <div class="detail-card">
+    <div class="detail-hero">
+      <div class="detail-name">${c.name}</div>
+      <div class="detail-co">${c.company||'未填公司'}</div>
+      <div class="detail-acts">
+        <span class="badge ${sc.c}" style="margin-left:0">${sc.l}</span>
+        <button class="btn-action" onclick="openClientModal('${c.id}')">✏️ 編輯</button>
+        <button class="btn-action" onclick="openQuoteModal('${c.id}')">💰 報價</button>
+        <button class="btn-action" onclick="openFuModal('${c.id}')">🔔 追蹤</button>
+        <button class="btn-action red" onclick="delClient('${c.id}')">🗑️ 刪除</button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="section">
+        <div class="sec-title">聯絡資訊</div>
+        <div class="info-grid">
+          <div class="info-f"><label>電話/LINE</label><span>${c.phone||'—'}</span></div>
+          <div class="info-f"><label>Email</label><span>${c.email||'—'}</span></div>
+          <div class="info-f"><label>航線</label><span>${c.route||'—'}</span></div>
+          <div class="info-f"><label>建立日期</label><span>${fmt(c.createdAt)}</span></div>
+        </div>
+      </div>
+      ${sent?`<div class="section"><div class="sec-title">已寄送文件</div><div class="sent-list">${sent}</div></div>`:''}
+      <div class="section">
+        <div class="sec-header"><div class="sec-title">報價紀錄</div><button class="btn-sm" onclick="openQuoteModal('${c.id}')">＋ 新增</button></div>
+        ${quotes}
+      </div>
+      <div class="section">
+        <div class="sec-header"><div class="sec-title">後續追蹤</div><button class="btn-sm" onclick="openFuModal('${c.id}')">✏️ 修改</button></div>
+        ${fu}
+      </div>
+      <div class="section">
+        <div class="sec-title">業務備忘</div>
+        ${notes}
+        <div class="add-note">
+          <textarea id="noteInput" placeholder="記錄通話、回覆、追蹤重點..."></textarea>
+
+```
+      <button class="btn-note" onclick="addNote('${c.id}')">記錄</button>
+    </div>
+  </div>
+</div>
+```
+
+  </div>`;
+}
+
+function addNote(id){
+const txt=document.getElementById(‘noteInput’).value.trim();if(!txt)return;
+const c=db.find(x=>x.id===id);if(!c)return;
+if(!c.notes)c.notes=[];
+c.notes.push({at:Date.now(),text:txt});
+save();showDetail(id);
+}
+
+function clearFu(id){
+const c=db.find(x=>x.id===id);if(!c)return;
+c.followup=null;save();showDetail(id);
+}
+
+function delClient(id){
+if(!confirm(‘確定刪除此客戶？’))return;
+db=db.filter(x=>x.id!==id);
+save();showMain();renderCards();
+}
+
+// ── CLIENT MODAL ──
+function openClientModal(id){
+editId=id||null;
+const c=id?db.find(x=>x.id===id):null;
+document.getElementById(‘cTitle’).textContent=c?‘✏️ 編輯客戶’:‘⚓ 新增客戶’;
+document.getElementById(‘cName’).value=c?.name||’’;
+document.getElementById(‘cCo’).value=c?.company||’’;
+document.getElementById(‘cPhone’).value=c?.phone||’’;
+document.getElementById(‘cEmail’).value=c?.email||’’;
+document.getElementById(‘cRoute’).value=c?.route||’’;
+document.getElementById(‘cStatus’).value=c?.status||‘new’;
+document.getElementById(‘cProfileDate’).value=c?.profileSentDate||’’;
+document.getElementById(‘cNote’).value=’’;
+document.querySelectorAll(’.chip-btn’).forEach(b=>b.classList.toggle(‘on’,(c?.docs||[]).includes(b.dataset.v)));
+openModal(‘clientModal’);
+}
+
+function saveClient(){
+const name=document.getElementById(‘cName’).value.trim();
+if(!name){alert(‘請填寫客戶姓名’);return;}
+const docs=[…document.querySelectorAll(’.chip-btn.on’)].map(b=>b.dataset.v);
+const note=document.getElementById(‘cNote’).value.trim();
+if(editId){
+const c=db.find(x=>x.id===editId);
+Object.assign(c,{name,docs,company:document.getElementById(‘cCo’).value.trim(),phone:document.getElementById(‘cPhone’).value.trim(),email:document.getElementById(‘cEmail’).value.trim(),route:document.getElementById(‘cRoute’).value.trim(),status:document.getElementById(‘cStatus’).value,profileSentDate:document.getElementById(‘cProfileDate’).value||null,updatedAt:Date.now()});
+if(note){if(!c.notes)c.notes=[];c.notes.push({at:Date.now(),text:note});}
+}else{
+db.push({id:‘c’+Date.now(),name,docs,company:document.getElementById(‘cCo’).value.trim(),phone:document.getElementById(‘cPhone’).value.trim(),email:document.getElementById(‘cEmail’).value.trim(),route:document.getElementById(‘cRoute’).value.trim(),status:document.getElementById(‘cStatus’).value,profileSentDate:document.getElementById(‘cProfileDate’).value||null,quotes:[],notes:note?[{at:Date.now(),text:note}]:[],followup:null,createdAt:Date.now()});
+}
+save();closeModal(‘clientModal’);
+if(curDetailId)showDetail(curDetailId);else renderCards();
+}
+
+// ── QUOTE MODAL ──
+function openQuoteModal(id){
+document.getElementById(‘qId’).value=id;
+document.getElementById(‘qAmt’).value=’’;
+document.getElementById(‘qCur’).value=‘USD’;
+document.getElementById(‘qDate’).value=today();
+document.getElementById(‘qExp’).value=’’;
+document.getElementById(‘qNote’).value=’’;
+openModal(‘quoteModal’);
+}
+
+function saveQuote(){
+const id=document.getElementById(‘qId’).value;
+const amt=document.getElementById(‘qAmt’).value;
+if(!amt){alert(‘請填寫金額’);return;}
+const c=db.find(x=>x.id===id);if(!c)return;
+if(!c.quotes)c.quotes=[];
+c.quotes.push({id:‘q’+Date.now(),amount:parseFloat(amt),currency:document.getElementById(‘qCur’).value,date:document.getElementById(‘qDate’).value,expiry:document.getElementById(‘qExp’).value||null,note:document.getElementById(‘qNote’).value.trim()});
+if(c.status===‘new’)c.status=‘quoted’;
+save();closeModal(‘quoteModal’);
+if(curDetailId)showDetail(curDetailId);else renderCards();
+}
+
+// ── FOLLOWUP MODAL ──
+function openFuModal(id){
+const c=db.find(x=>x.id===id);
+document.getElementById(‘fuId’).value=id;
+document.getElementById(‘fuDate’).value=c?.followup?.date||’’;
+document.getElementById(‘fuNote’).value=c?.followup?.note||’’;
+openModal(‘fuModal’);
+}
+
+function saveFollowup(){
+const id=document.getElementById(‘fuId’).value;
+const date=document.getElementById(‘fuDate’).value;
+if(!date){alert(‘請選擇追蹤日期’);return;}
+const c=db.find(x=>x.id===id);if(!c)return;
+c.followup={date,note:document.getElementById(‘fuNote’).value.trim()};
+if(c.status===‘quoted’)c.status=‘follow’;
+save();closeModal(‘fuModal’);
+if(curDetailId)showDetail(curDetailId);else renderCards();
+}
+
+// ── MODAL HELPERS ──
+function openModal(id){document.getElementById(id).classList.add(‘on’);}
+function closeModal(id){document.getElementById(id).classList.remove(‘on’);}
+function bgClose(e,id){if(e.target.id===id)closeModal(id);}
+function toggleChip(btn){btn.classList.toggle(‘on’);}
+
+// ── PIPELINE ──
+function renderPipeline(){
+const order=[‘new’,‘phone_called’,‘quoted’,‘follow’,‘won’,‘closed’];
+document.getElementById(‘pipelineEl’).innerHTML=order.map(s=>{
+const sc=STATUS_MAP[s];
+const items=db.filter(c=>c.status===s);
+return `<div class="pipe-col"> <div class="pipe-head" style="color:${sc.col}">${sc.l}<span class="pipe-count">${items.length}</span></div> ${items.map(c=>{ const lq=c.quotes?.length?c.quotes[c.quotes.length-1]:null; const isOd=c.followup&&od(c.followup.date); return `<div class="pipe-card" onclick="switchToDetail('${c.id}')">
+<div class="pn">${c.name}</div><div class="pc">${c.company||’—’}</div>
+${lq?`<div class="pq">💰 ${lq.currency} ${Number(lq.amount).toLocaleString()}</div>`:’’}
+${c.followup?`<div class="pf${isOd?' od':''}">${isOd?'⚠️':'🔔'} ${fmt(c.followup.date)}</div>`:’’}
+<div class="pd">${fmt(c.createdAt)}</div>
+</div>`; }).join('')} </div>`;
+}).join(’’);
+}
+
+function switchToDetail(id){
+document.querySelectorAll(’.tab’).forEach((t,i)=>t.classList.toggle(‘on’,i===0));
+document.querySelectorAll(’.page’).forEach(p=>p.classList.remove(‘on’));
+document.getElementById(‘page-list’).classList.add(‘on’);
+document.getElementById(‘list-main’).style.display=‘none’;
+showDetail(id);
+}
+
+// ── TIMELINE ──
+function renderTimeline(){
+const evs=[];
+const icos={client:‘⚓’,profile:‘📄’,quote:‘💰’,note:‘💬’,followup:‘🔔’};
+const cols={client:‘var(–accent)’,profile:‘var(–green)’,quote:‘var(–orange)’,note:‘var(–muted)’,followup:‘var(–purple)’};
+db.forEach(c=>{
+evs.push({ts:c.createdAt,type:‘client’,label:‘新增客戶’,name:c.name,sub:c.company||’’,id:c.id});
+if(c.profileSentDate)evs.push({ts:new Date(c.profileSentDate).getTime(),type:‘profile’,label:‘寄送公司簡介’,name:c.name,sub:’’,id:c.id});
+(c.quotes||[]).forEach(q=>evs.push({ts:new Date(q.date).getTime(),type:‘quote’,label:‘報價’,name:c.name,sub:`${q.currency} ${Number(q.amount).toLocaleString()}`,id:c.id}));
+(c.notes||[]).forEach(n=>evs.push({ts:n.at,type:‘note’,label:‘備忘’,name:c.name,sub:n.text.slice(0,50),id:c.id}));
+if(c.followup)evs.push({ts:new Date(c.followup.date).getTime(),type:‘followup’,label:‘追蹤提醒’,name:c.name,sub:c.followup.note||’’,id:c.id});
+});
+evs.sort((a,b)=>b.ts-a.ts);
+const el=document.getElementById(‘timelineEl’);
+if(!evs.length){el.innerHTML=’<div class="empty"><div class="empty-ico">⏳</div><div>尚無紀錄</div></div>’;return;}
+el.innerHTML=evs.map((ev,i)=>` <div class="tl-item"> <div class="tl-line-wrap"> <div class="tl-dot" style="border-color:${cols[ev.type]};color:${cols[ev.type]}">${icos[ev.type]}</div> ${i<evs.length-1?'<div class="tl-connector"></div>':''} </div> <div class="tl-body"> <div class="tl-date">${new Date(ev.ts).toLocaleString('zh-TW')}</div> <div class="tl-card" onclick="switchToDetail('${ev.id}')"> <div class="tl-type" style="color:${cols[ev.type]}">${ev.label}</div> <div class="tl-title">${ev.name}</div> ${ev.sub?`<div class="tl-sub">${ev.sub}</div>`:''} </div> </div> </div>`).join(’’);
+}
+
+// ── STATS ──
+function renderStats(){
+const t=db.length,w=db.filter(c=>c.status===‘won’).length,q=db.filter(c=>c.status===‘quoted’).length,f=db.filter(c=>c.status===‘follow’).length;
+const rate=t?Math.round(w/t*100):0;
+const ov=db.filter(c=>c.followup&&od(c.followup.date)).length;
+const totalUSD=db.reduce((a,c)=>a+(c.quotes||[]).reduce((x,q)=>x+(q.currency===‘USD’?q.amount:0),0),0);
+document.getElementById(‘statGrid’).innerHTML=` <div class="stat-card"><div class="sl">總客戶</div><div class="sv">${t}</div></div> <div class="stat-card"><div class="sl">報價中</div><div class="sv" style="color:var(--orange)">${q}</div></div> <div class="stat-card"><div class="sl">追蹤中</div><div class="sv" style="color:var(--purple)">${f}</div></div> <div class="stat-card"><div class="sl">成交</div><div class="sv" style="color:var(--green)">${w}</div></div> <div class="stat-card"><div class="sl">成交率</div><div class="sv" style="color:var(--green)">${rate}%</div><div class="ss">${w}/${t}</div></div> <div class="stat-card"><div class="sl">逾期追蹤</div><div class="sv" style="color:${ov?'var(--red)':'var(--muted)'}">${ov}</div></div> ${totalUSD?`<div class="stat-card" style="grid-column:span 2"><div class="sl">報價總額(USD)</div><div class="sv" style="color:var(--orange);font-size:20px">$${totalUSD.toLocaleString()}</div></div>`:''}`;
+const dc={};db.forEach(c=>(c.docs||[]).forEach(d=>{dc[d]=(dc[d]||0)+1;}));
+document.getElementById(‘docGrid’).innerHTML=Object.entries(DOC_MAP).map(([k,v])=>`<div class="doc-stat"><div class="dl">${v}</div><div class="dv">${dc[k]||0}</div></div>`).join(’’);
+const an=[];db.forEach(c=>(c.notes||[]).forEach(n=>an.push({…n,cn:c.name})));
+an.sort((a,b)=>b.at-a.at);
+document.getElementById(‘recentNotes’).innerHTML=an.slice(0,5).map(n=>`<div class="note-item"><div class="note-meta">${n.cn} · ${new Date(n.at).toLocaleString('zh-TW')}</div><div class="note-txt">${n.text}</div></div>`).join(’’)||’<p style="color:var(--muted);font-size:13px">尚無備忘</p>’;
+}
+
+// ── SCAN / PASTE ──
+function openScan(){resetScan();openModal(‘scanModal’);}
+
+function resetScan(){
+scanClients=[];
+document.getElementById(‘scanStep1’).style.display=‘block’;
+document.getElementById(‘scanStep2’).style.display=‘none’;
+document.getElementById(‘scanSaveBtn’).style.display=‘none’;
+document.getElementById(‘pasteText’).value=’’;
+document.getElementById(‘scanBody’).innerHTML=’’;
+}
+
+function backToStep1(){
+document.getElementById(‘scanStep1’).style.display=‘block’;
+document.getElementById(‘scanStep2’).style.display=‘none’;
+document.getElementById(‘scanSaveBtn’).style.display=‘none’;
+}
+
+function parsePastedText(){
+const raw=document.getElementById(‘pasteText’).value.trim();
+if(!raw){alert(‘請先貼上文字’);return;}
+
+// Parse lines - handle various formats
+const lines=raw.split(’\n’).map(l=>l.trim()).filter(l=>l.length>2);
+scanClients=[];
+
+// Regex patterns
+const phoneRe=/(\d{6,10}(?:[、,，]\s*\d{6,10})*)/g;
+
+let i=0;
+while(i<lines.length){
+const line=lines[i];
+
+```
+// Skip page markers / headers
+if(/第[一二三四五六七八九十\d]+頁/.test(line)||line.length<2){i++;continue;}
+
+// Try to find phone in this line or next
+const phones=line.match(phoneRe);
+let company='',phone='',note='';
+
+if(phones){
+  // Phone found in same line - split around it
+  const idx=line.indexOf(phones[0]);
+  company=line.slice(0,idx).trim();
+  phone=phones.join('、');
+  note=line.slice(line.lastIndexOf(phones[phones.length-1])+phones[phones.length-1].length).trim();
+
+  // If company is empty, might be continuation from prev line
+  if(!company&&scanClients.length){
+    // append to previous
+    i++;continue;
+  }
+} else {
+  // No phone - might be company name only (split across lines)
+  // Check if next line has phone
+  const nextLine=lines[i+1]||'';
+  const nextPhones=nextLine.match(phoneRe);
+  if(nextPhones){
+    company=line;
+    phone=nextPhones.join('、');
+    const pi=nextLine.indexOf(nextPhones[0]);
+    note=nextLine.slice(nextLine.lastIndexOf(nextPhones[nextPhones.length-1])+nextPhones[nextPhones.length-1].length).trim();
+    i++;// skip next line since we consumed it
+  } else {
+    // Might be partial company name, skip or treat as note
+    i++;continue;
+  }
+}
+
+// Clean up company name
+company=company.replace(/[\s　]+/g,'').replace(/[。，,、]/g,'');
+// Clean note
+note=note.replace(/^[.。\s]+/,'').trim();
+
+if(company.length>1){
+  scanClients.push({company,phone,note});
+}
+i++;
+```
+
+}
+
+if(!scanClients.length){
+alert(‘無法解析出客戶資料，請確認格式是否正確（公司名稱 電話 備注）’);
+return;
+}
+
+// Render table
+document.getElementById(‘scanCount’).textContent=`✅ 解析到 ${scanClients.length} 筆，可直接修改後匯入`;
+document.getElementById(‘scanBody’).innerHTML=scanClients.map((c,idx)=>` <tr> <td><input type="checkbox" id="sc${idx}" checked style="accent-color:var(--accent)"></td> <td><input id="sco${idx}" value="${esc(c.company)}" style="min-width:120px"></td> <td><input id="scp${idx}" value="${esc(c.phone)}" style="min-width:90px"></td> <td><input id="scn${idx}" value="${esc(c.note)}" style="min-width:80px"></td> </tr>`).join(’’);
+document.getElementById(‘scanStep1’).style.display=‘none’;
+document.getElementById(‘scanStep2’).style.display=‘block’;
+document.getElementById(‘scanSaveBtn’).style.display=‘block’;
+}
+
+function esc(s){return(s||’’).replace(/”/g,’"’).replace(/</g,’<’);}
+
+function saveScan(){
+let n=0;
+scanClients.forEach((_,i)=>{
+if(!document.getElementById(‘sc’+i)?.checked)return;
+const co=document.getElementById(‘sco’+i)?.value.trim();
+if(!co)return;
+const ph=document.getElementById(‘scp’+i)?.value.trim();
+const nt=document.getElementById(‘scn’+i)?.value.trim();
+db.push({id:‘c’+Date.now()+i,name:co,company:co,phone:ph||’’,email:’’,route:’’,status:‘new’,docs:[],quotes:[],notes:nt?[{at:Date.now(),text:nt}]:[],followup:null,profileSentDate:null,createdAt:Date.now()+i});
+n++;
+});
+save();resetScan();closeModal(‘scanModal’);renderCards();
+if(n)alert(`✅ 已匯入 ${n} 筆客戶！`);
+}
+
+// ── INIT ──
+renderKpi();
+renderCards();
+</script>
+
+</body>
+</html>
