@@ -7,10 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>海運業務 CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getFirestore,collection,getDocs,setDoc,deleteDoc,doc,onSnapshot,writeBatch}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
 const firebaseConfig={
   apiKey:"AIzaSyAH-6QNPk1N6vK6ytgEuJRmlvqSw1kbCpc",
   authDomain:"sea-crm.firebaseapp.com",
@@ -19,54 +18,43 @@ const firebaseConfig={
   messagingSenderId:"921833831688",
   appId:"1:921833831688:web:6b3de63da97b6391af40bd"
 };
-
-const app=initializeApp(firebaseConfig);
-const firestore=getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const _firestore=firebase.firestore();
 const COL='clients';
 
-// 即時同步：監聽 Firestore 變化
-window._fsUnsub=null;
-function startSync(){
-  const ref=collection(firestore,COL);
-  window._fsUnsub=onSnapshot(ref,snap=>{
-    window.db=snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderKpi();renderCards();
-    showSyncStatus('✅ 已同步');
-  },err=>{showSyncStatus('⚠️ 同步失敗');console.error(err);});
-}
+// 即時同步
+_firestore.collection(COL).onSnapshot(snap=>{
+  window._db=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const el=document.getElementById('syncStatus');
+  if(el){el.textContent='✅ 已同步';setTimeout(()=>el.textContent='',3000);}
+  if(typeof renderKpi==='function') renderKpi();
+  if(typeof renderCards==='function') renderCards();
+},err=>{
+  const el=document.getElementById('syncStatus');
+  if(el) el.textContent='⚠️ 同步失敗：'+err.message;
+  console.error('Firebase錯誤:',err);
+});
 
-// 儲存單筆到 Firestore
+// 儲存單筆
 window.saveToFirestore=async function(client){
-  try{
-    await setDoc(doc(firestore,COL,client.id),client);
-  }catch(e){console.error('儲存失敗',e);}
+  try{await _firestore.collection(COL).doc(client.id).set(client);}
+  catch(e){console.error('儲存失敗',e);}
 };
 
 // 刪除單筆
 window.deleteFromFirestore=async function(id){
-  try{
-    await deleteDoc(doc(firestore,COL,id));
-  }catch(e){console.error('刪除失敗',e);}
+  try{await _firestore.collection(COL).doc(id).delete();}
+  catch(e){console.error('刪除失敗',e);}
 };
 
-// 批次匯入
+// 批次儲存
 window.batchSaveToFirestore=async function(clients){
-  const batch=writeBatch(firestore);
-  clients.forEach(c=>batch.set(doc(firestore,COL,c.id),c));
-  await batch.commit();
+  try{
+    const batch=_firestore.batch();
+    clients.forEach(c=>batch.set(_firestore.collection(COL).doc(c.id),c));
+    await batch.commit();
+  }catch(e){console.error('批次儲存失敗',e);}
 };
-
-function showSyncStatus(msg){
-  let el=document.getElementById('syncStatus');
-  if(!el)return;
-  el.textContent=msg;
-  setTimeout(()=>{el.textContent='';},3000);
-}
-
-window.addEventListener('load',()=>{
-  window.db=[];
-  startSync();
-});
 </script>
 <style>
 :root{
@@ -551,9 +539,14 @@ const STATUS_MAP={
   closed:{l:'結案',c:'b-closed',col:'var(--muted)'}
 };
 
-// db 由 Firebase onSnapshot 管理，存在 window.db
-if(!window.db) window.db=[];
-Object.defineProperty(window,'db',{get:()=>window._db||[],set:v=>{window._db=v;}});
+// db 由 Firebase onSnapshot 管理，存在 window._db
+window._db=window._db||[];
+// db getter - 永遠取得最新的 Firebase 資料
+Object.defineProperty(window,'db',{
+  get(){return window._db||[];},
+  set(v){window._db=v;},
+  configurable:true
+});
 
 let editId=null,curFilter='all',curDetailId=null,scanClients=[],selectMode=false;
 
