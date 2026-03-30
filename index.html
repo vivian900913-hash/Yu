@@ -282,7 +282,8 @@ input,select,textarea{font-family:var(--sans);outline:none}
   <div class="brand">🚢 SEA·CRM<span>海運業務追蹤</span></div>
   <span id="syncStatus" style="font-size:11px;color:var(--green);margin-right:auto;padding-left:8px"></span>
   <div class="top-btns">
-    <button class="btn-top" style="background:var(--surface);color:var(--text);border:1px solid var(--border)" onclick="exportData()">📄 匯出PDF</button>
+    <button class="btn-top" style="background:#fff7ed;color:var(--orange);border:1px solid #fed7aa" onclick="exportData()">📄 PDF</button>
+    <button class="btn-top" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0" onclick="exportCSV()">📊 試算表</button>
     <button class="btn-top" style="background:var(--surface);color:var(--text);border:1px solid var(--border)" onclick="document.getElementById('importFile').click()">⬆️ 匯入</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
     <button class="btn-top btn-scan" onclick="openScan()">📋 貼上</button>
@@ -1214,7 +1215,34 @@ function exportData(){
   setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 
-function importData(input){
+function exportCSV(){
+  if(!db.length){alert('目前沒有資料可以匯出');return;}
+  const headers=['公司名稱','電話','傳真','Email','聯絡人','寄送日期','狀態','航線','最新備注'];
+  const rows=db.slice().sort((a,b)=>b.createdAt-a.createdAt).map(c=>{
+    const sc=STATUS_MAP[c.status]||STATUS_MAP.new;
+    const note=c.notes&&c.notes.length?c.notes[c.notes.length-1].text:'';
+    return [
+      c.company||c.name,
+      c.phone||'',
+      c.fax||'',
+      c.email||'',
+      c.contact||'',
+      c.sendDate?fmt(c.sendDate):'',
+      sc.l,
+      c.route||'',
+      note
+    ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');
+  });
+  const csv='\uFEFF'+[headers.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const date=new Date().toLocaleDateString('zh-TW').replace(/\//g,'-');
+  a.href=url;
+  a.download=`SEA-CRM-客戶清單-${date}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
   const file=input.files[0];
   if(!file)return;
   const reader=new FileReader();
