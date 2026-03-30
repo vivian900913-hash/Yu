@@ -309,6 +309,15 @@ input,select,textarea{font-family:var(--sans);outline:none}
         <span class="search-icon">🔍</span>
         <input type="text" id="searchQ" placeholder="搜尋公司/電話/聯絡人..." oninput="renderCards()">
       </div>
+      <button class="btn-top" style="background:#fef2f2;color:var(--red);border:1px solid #fecaca;font-size:12px" onclick="toggleSelectMode()" id="selectModeBtn">☑️ 選取</button>
+    </div>
+    <!-- 批量刪除工具列 -->
+    <div id="batchBar" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 12px;margin-bottom:10px;display:none;align-items:center;gap:10px;flex-wrap:wrap">
+      <button onclick="selectAll()" style="font-size:12px;padding:5px 12px;border-radius:6px;background:#fff;border:1px solid var(--border);color:var(--text);cursor:pointer">全選</button>
+      <button onclick="deselectAll()" style="font-size:12px;padding:5px 12px;border-radius:6px;background:#fff;border:1px solid var(--border);color:var(--text);cursor:pointer">取消全選</button>
+      <span id="selectedCount" style="font-size:13px;color:var(--red);font-weight:600"></span>
+      <button onclick="batchDelete()" style="font-size:13px;padding:7px 16px;border-radius:8px;background:var(--red);color:#fff;font-weight:700;border:none;cursor:pointer;margin-left:auto">🗑️ 刪除選取</button>
+      <button onclick="toggleSelectMode()" style="font-size:12px;padding:5px 12px;border-radius:6px;background:#fff;border:1px solid var(--border);color:var(--muted);cursor:pointer">取消</button>
     </div>
     <div class="filters" id="filterRow">
       <button class="pill on" onclick="setFilter('all',this)">全部</button>
@@ -545,7 +554,47 @@ const STATUS_MAP={
 if(!window.db) window.db=[];
 Object.defineProperty(window,'db',{get:()=>window._db||[],set:v=>{window._db=v;}});
 
-let editId=null,curFilter='all',curDetailId=null,scanClients=[];
+let editId=null,curFilter='all',curDetailId=null,scanClients=[],selectMode=false;
+
+// ── 批量刪除 ──
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  const bar=document.getElementById('batchBar');
+  const btn=document.getElementById('selectModeBtn');
+  bar.style.display=selectMode?'flex':'none';
+  btn.style.display=selectMode?'none':'inline-flex';
+  renderCards();
+}
+
+function toggleCheck(id){
+  const chk=document.getElementById('chk_'+id);
+  if(chk) chk.checked=!chk.checked;
+  updateSelectedCount();
+}
+
+function selectAll(){
+  document.querySelectorAll('[id^="chk_"]').forEach(c=>c.checked=true);
+  updateSelectedCount();
+}
+
+function deselectAll(){
+  document.querySelectorAll('[id^="chk_"]').forEach(c=>c.checked=false);
+  updateSelectedCount();
+}
+
+function updateSelectedCount(){
+  const n=document.querySelectorAll('[id^="chk_"]:checked').length;
+  document.getElementById('selectedCount').textContent=n?`已選取 ${n} 筆`:'';
+}
+
+function batchDelete(){
+  const ids=[...document.querySelectorAll('[id^="chk_"]:checked')].map(c=>c.id.replace('chk_',''));
+  if(!ids.length){alert('請先勾選要刪除的客戶');return;}
+  if(!confirm(`確定刪除選取的 ${ids.length} 筆客戶？此操作無法復原。`))return;
+  ids.forEach(id=>delFromDB(id));
+  toggleSelectMode();
+  setTimeout(()=>renderCards(),800);
+}
 
 // save: 儲存單筆到 Firebase
 function save(client){
@@ -626,9 +675,10 @@ function cardHTML(c){
   const ln=c.notes?.length?c.notes[c.notes.length-1]:null;
   const chips=(c.docs||[]).map(d=>`<span class="chip">${DOC_MAP[d]||d}</span>`).join('');
   const isOd=c.followup&&od(c.followup.date);
-  return `<div class="card s-${c.status}" onclick="showDetail('${c.id}')">
+  const checkBox=selectMode?`<input type="checkbox" id="chk_${c.id}" onclick="event.stopPropagation();updateSelectedCount()" style="width:18px;height:18px;accent-color:var(--red);flex-shrink:0;cursor:pointer;margin-right:4px">`:'';
+  return `<div class="card s-${c.status}" onclick="${selectMode?`toggleCheck('${c.id}')`:` showDetail('${c.id}')`}">
     <div class="card-top">
-      <div><div class="c-name">${c.name}</div><div class="c-co">${c.company||'—'}</div></div>
+      <div style="display:flex;align-items:center;gap:6px;flex:1">${checkBox}<div><div class="c-name">${c.name}</div><div class="c-co">${c.company||'—'}</div></div></div>
       <span class="badge ${sc.c}">${sc.l}</span>
     </div>
     <div class="card-row"><span>📞</span>${c.phone||'—'}&nbsp;&nbsp;<span>🚢</span>${c.route||'—'}</div>
